@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BlackJack
 {
-	public enum CardTypesEnum
+	public enum CardTypes
 	{
 		Diamonds,
 		Hearts,
