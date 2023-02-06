@@ -8,10 +8,10 @@ namespace BlackJack
 {
     public enum CardEnum
     {
-       number,
-       jack,
-       queen,
-       king,
-       ace
+       Number,
+       Jack,
+       Queen,
+       King,
+       Ace
     }
 }
