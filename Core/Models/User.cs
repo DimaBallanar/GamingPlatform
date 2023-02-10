@@ -6,7 +6,19 @@ using System.Threading.Tasks;
 
 namespace Core.Models
 {
-    internal class User
+    public class User
     {
+        public int Id { get; }
+        public string Name { get; set; }
+        public string Password { get; set; }
+
+
+        public User(int id, string name, string password)
+        {
+            Id = id;
+            Name = name;
+            Password = password;
+
+        }
     }
 }
