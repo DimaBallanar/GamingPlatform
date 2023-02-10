@@ -53,11 +53,21 @@ namespace Core.Repo
             // System.Console.WriteLine("ERROR input");
             return null;
         }
-        public bool Registr(List<User?> users)
+        public User Registr(List<User?> users)
         {
             string name = Login();
             string pass = Password();
-            if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(pass))
+            if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(pass))
+            {
+                return null;
+            }
+            for (int i = 0; i <= users.Count; i++)
+            {
+                if (users[i].Name == name)
+                {                    
+                    return users[i];
+                }
+            }
             {
                 File.AppendAllText($"{AppDomain.CurrentDomain.BaseDirectory}DT.txt", $"\n{name},{pass}");
                 Console.WriteLine("Регистрация завершена");
