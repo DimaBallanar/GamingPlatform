@@ -10,40 +10,40 @@ using System.Text.Json;
 
 namespace Core.Repo
 {
-    public  class UserRepo:Menus
-    {          
-                
+    public class UserRepo : Menus
+    {
+
         private string[] Lines = File.ReadAllLines($"{AppDomain.CurrentDomain.BaseDirectory}DT.txt");
 
 
-        public User GetOne()
+        private bool Search()
         {
-            List<User> userList = GetAll();
-            for (int i = 0; i < userList.Count; i++)
+            string[] Lines = File.ReadAllLines(@"D:\ДЗ С#\hschool\hschool_beggining_csh\Game\User\DataBase\DT.txt");
+            if (string.IsNullOrEmpty(Login()) || string.IsNullOrEmpty(Password()))
             {
-                if (userList[i].Name.Equals(Login()))
+                Console.WriteLine("ERROR");
+                return false;
+            }
+            for (int i = 0; i < Lines.Length; i++)
+            {
+                string[] strings = Lines[i].Split(',');
+                if (strings[0] == Login() && strings[1] == Password())
                 {
-                    return userList[i];
+                    Console.WriteLine("Login Succesful");
+                    return true;
                 }
             }
-            return null;
+            System.Console.WriteLine("ERROR input");
+            return false;
         }
-        public User Create(User newuser)
+        public bool Registr()
         {
-            List<User> userList = GetAll();
-            for (int i = 0; i < userList.Count; i++)
+            if (SearchSimple(name, pass))
             {
-                if (userList[i].Name.Equals(newuser.Name))
-                {
-                    return null;
-                }
+                File.AppendAllText(@"D:\ДЗ С#\hschool\hschool_beggining_csh\Game\User\DataBase\DT.txt", $"\n{name},{pass}");
+                Console.WriteLine("Регистрация завершена");
             }
-            userList.Add(newuser);
-            if (UpdateFile(userList))
-            {
-                return newuser;
-            }
-            return null;
+            return Login();
         }
         public User Update(User userUpdate)
         {
@@ -132,5 +132,5 @@ namespace Core.Repo
         }
     }
 }
-    
+
 
