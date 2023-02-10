@@ -32,59 +32,41 @@ namespace Core.Repo
                 line = sr1.ReadLine();
             }
         }
-        private bool Search(List<User?> users)
+        private User Search(List<User?> users)
         {
-           string name = Login();
-           string  pass = Password();
+            string name = Login();
+            string pass = Password();
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(pass))
             {
                 Console.WriteLine("ERROR");
-                return false;
+                return null;
             }
 
             for (int i = 0; i <= users.Count; i++)
             {
                 if (users[i].Name == name && users[i].Password == pass)
                 {
-                   // Console.WriteLine("Login Succesful");
-                    return true;
+                    // Console.WriteLine("Login Succesful");
+                    return users[i];
                 }
             }
-           // System.Console.WriteLine("ERROR input");
-            return false;
+            // System.Console.WriteLine("ERROR input");
+            return null;
         }
         public bool Registr(List<User?> users)
         {
             string name = Login();
             string pass = Password();
-            if (SearchSimple(name, pass))
+            if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(pass))
             {
                 File.AppendAllText($"{AppDomain.CurrentDomain.BaseDirectory}DT.txt", $"\n{name},{pass}");
                 Console.WriteLine("Регистрация завершена");
                 return true;
             }
             Console.WriteLine("Попробуйте еще раз");
-            return Registr();
+            return false;
+        }
 
-        }
-        private bool SearchSimple(string? name, string? password)
-        {
-            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(password))
-            {
-                System.Console.WriteLine("ERROR");
-                return Registr();
-            }
-            for (int i = 0; i < Lines.Length; i++)
-            {
-                string[] strings = Lines[i].Split(',');
-                if (strings[0] == name)
-                {
-                    Console.WriteLine("такой пользователь уже существует");
-                    return Registr();
-                }
-            }
-            return true;
-        }
         public User Update(User userUpdate)
         {
             List<User> userList = GetAll();
