@@ -13,20 +13,37 @@ namespace Core.Repo
     public class UserRepo : Menus
     {
 
-        private string[] Lines = File.ReadAllLines($"{AppDomain.CurrentDomain.BaseDirectory}DT.txt");
 
+        //private string[] Lines = File.ReadAllLines($"{AppDomain.CurrentDomain.BaseDirectory}DT.txt");
 
-        private bool Search()
+        public UserRepo()
         {
-            string[] Lines = File.ReadAllLines(@"D:\ДЗ С#\hschool\hschool_beggining_csh\Game\User\DataBase\DT.txt");
-            if (string.IsNullOrEmpty(Login()) || string.IsNullOrEmpty(Password()))
+            List<User> users = new List<User>();
+            var serializeoptions = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            };
+            using StreamReader sr1 = new StreamReader($"{AppDomain.CurrentDomain.BaseDirectory}DT.txt");
+            string line = sr1.ReadLine();
+            while (line != null)
+            {
+                User user = JsonSerializer.Deserialize<User>(line, serializeoptions);
+                users.Add(user);
+                line = sr1.ReadLine();
+            }
+        }
+        private bool Search(List<User?> users)
+        {
+           string name = Login();
+           string  pass = Password();
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(pass))
             {
                 Console.WriteLine("ERROR");
                 return false;
             }
-            for (int i = 0; i < Lines.Length; i++)
+
+            for (int i = 0; i < users.Count; i++)
             {
-                string[] strings = Lines[i].Split(',');
                 if (strings[0] == Login() && strings[1] == Password())
                 {
                     Console.WriteLine("Login Succesful");
@@ -38,12 +55,35 @@ namespace Core.Repo
         }
         public bool Registr()
         {
+            string name = Login();
+            string pass = Password();
             if (SearchSimple(name, pass))
             {
-                File.AppendAllText(@"D:\ДЗ С#\hschool\hschool_beggining_csh\Game\User\DataBase\DT.txt", $"\n{name},{pass}");
+                File.AppendAllText($"{AppDomain.CurrentDomain.BaseDirectory}DT.txt", $"\n{name},{pass}");
                 Console.WriteLine("Регистрация завершена");
+                return true;
             }
-            return Login();
+            Console.WriteLine("Попробуйте еще раз");
+            return Registr();
+
+        }
+        private bool SearchSimple(string? name, string? password)
+        {
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(password))
+            {
+                System.Console.WriteLine("ERROR");
+                return Registr();
+            }
+            for (int i = 0; i < Lines.Length; i++)
+            {
+                string[] strings = Lines[i].Split(',');
+                if (strings[0] == name)
+                {
+                    Console.WriteLine("такой пользователь уже существует");
+                    return Registr();
+                }
+            }
+            return true;
         }
         public User Update(User userUpdate)
         {
