@@ -42,18 +42,18 @@ namespace Core.Repo
                 return false;
             }
 
-            for (int i = 0; i < users.Count; i++)
+            for (int i = 0; i <= users.Count; i++)
             {
-                if (strings[0] == Login() && strings[1] == Password())
+                if (users[i].Name == name && users[i].Password == pass)
                 {
-                    Console.WriteLine("Login Succesful");
+                   // Console.WriteLine("Login Succesful");
                     return true;
                 }
             }
-            System.Console.WriteLine("ERROR input");
+           // System.Console.WriteLine("ERROR input");
             return false;
         }
-        public bool Registr()
+        public bool Registr(List<User?> users)
         {
             string name = Login();
             string pass = Password();
