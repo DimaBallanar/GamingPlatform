@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 
 namespace Core.Menu
 {
-    public static class Menu
+    public  class Menus
     {
 
-        public string Login()
+        public  string Login()
         {
             System.Console.Write("введите логин: ");
-            string? login = Console.ReadLine();
-            System.Console.Write("введите пароль:");
-            string? pass = Console.ReadLine();
+            string? login = Console.ReadLine();            
             return login;
         }
 
-        public string Password()
+        public  string Password()
         {
-
+            System.Console.Write("введите пароль:");
+            string? pass = Console.ReadLine();
+            return pass;
         }
     }
 }
