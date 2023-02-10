@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Core.Menu
 {
-    internal class Menu
+    public static class Menu
     {
+
     }
 }
