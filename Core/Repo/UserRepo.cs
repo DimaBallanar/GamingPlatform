@@ -7,6 +7,7 @@ using Core.Models;
 using Core.Menu;
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Core.Repo
 {
@@ -64,17 +65,21 @@ namespace Core.Repo
             for (int i = 0; i <= users.Count; i++)
             {
                 if (users[i].Name == name)
-                {                    
-                    return users[i];
+                {
+                    Console.WriteLine("Попробуйте еще раз");
+                    return null;
                 }
             }
-            {
+            var newUser=new User { Id=users.Count+1,Name= name, Password = pass };
+            string jsonString = JsonSerializer.Serialize(newUser);
+            users.Add(jsonString);
+            
                 File.AppendAllText($"{AppDomain.CurrentDomain.BaseDirectory}DT.txt", $"\n{name},{pass}");
                 Console.WriteLine("Регистрация завершена");
                 return true;
-            }
-            Console.WriteLine("Попробуйте еще раз");
-            return false;
+            
+            
+           
         }
 
         public User Update(User userUpdate)
