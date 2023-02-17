@@ -8,18 +8,20 @@ using Core.Menu;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Xml.Linq;
 
 namespace Core.Repo
 {
     public class UserRepo : Menus
     {
-
+        private int CountId;
+        List<User> Users = new List<User>();
 
         //private string[] Lines = File.ReadAllLines($"{AppDomain.CurrentDomain.BaseDirectory}DT.txt");
 
         public UserRepo()
         {
-            List<User> users = new List<User>();
+           
             var serializeoptions = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -29,11 +31,11 @@ namespace Core.Repo
             while (line != null)
             {
                 User user = JsonSerializer.Deserialize<User>(line, serializeoptions);
-                users.Add(user);
+                Users.Add(user);
                 line = sr1.ReadLine();
             }
         }
-        private User Search(List<User?> users)
+        private User Search()
         {
             string name = Login();
             string pass = Password();
@@ -43,18 +45,31 @@ namespace Core.Repo
                 return null;
             }
 
-            for (int i = 0; i <= users.Count; i++)
+            for (int i = 0; i < Users.Count; i++)
             {
-                if (users[i].Name == name && users[i].Password == pass)
+                if (Users[i].Name == name && Users[i].Password == pass)
                 {
                     // Console.WriteLine("Login Succesful");
-                    return users[i];
+                    return Users[i];
                 }
             }
             // System.Console.WriteLine("ERROR input");
             return null;
         }
-        public User Registr(List<User?> users)
+        public bool Exist(User user)
+        {
+
+            for (int i = 0; i < Users.Count; i++)
+            {
+                if (Users[i].Name == name && Users[i].Password == pass)
+                {
+                    // Console.WriteLine("Login Succesful");
+                    return Users[i];
+                }
+            }
+
+        }
+        public User Registr()
         {
             string name = Login();
             string pass = Password();
@@ -62,24 +77,23 @@ namespace Core.Repo
             {
                 return null;
             }
-            for (int i = 0; i <= users.Count; i++)
+            for (int i = 0; i < Users.Count; i++)
             {
-                if (users[i].Name == name)
+                if (Users[i].Name == name)
                 {
                     Console.WriteLine("Попробуйте еще раз");
                     return null;
                 }
             }
-            var newUser=new User { Id=users.Count+1,Name= name, Password = pass };
-            string jsonString = JsonSerializer.Serialize(newUser);
-            users.Add(jsonString);
-            
-                File.AppendAllText($"{AppDomain.CurrentDomain.BaseDirectory}DT.txt", $"\n{name},{pass}");
-                Console.WriteLine("Регистрация завершена");
-                return true;
-            
-            
-           
+            User newUser = new User(CountId++, name, pass);
+            //users.Add(newUser);
+
+            File.AppendAllText($"{AppDomain.CurrentDomain.BaseDirectory}DT.txt", $"{newUser}");
+            Console.WriteLine("Регистрация завершена");
+            return newUser;
+
+
+
         }
 
         public User Update(User userUpdate)
@@ -124,7 +138,7 @@ namespace Core.Repo
             };
             try
             {
-                using StreamReader sr1 = new StreamReader($"{path}users.txt");
+                using StreamReader sr1 = new StreamReader($"{AppDomain.CurrentDomain.BaseDirectory}DT.txt");
                 string line = sr1.ReadLine();
                 while (line != null)
                 {
@@ -149,7 +163,7 @@ namespace Core.Repo
                 {
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                 };
-                StreamWriter sw1 = new StreamWriter($"{path}users.txt");
+                StreamWriter sw1 = new StreamWriter($"{AppDomain.CurrentDomain.BaseDirectory}DT.txt");
                 for (int i = 0; i < userList.Count; i++)
                 {
                     if (userList[i] != null)
@@ -167,6 +181,7 @@ namespace Core.Repo
                 return false;
             }
         }
+
     }
 }
 
